@@ -15,8 +15,24 @@
         $newItem['price'] = $_POST['itemPrice'];
         $newItem['image'] = $_POST['itemImage'];
         
-        // Storing the item array in the cart array
-        array_push($_SESSION['cart'], $newItem);
+        /* Check to see if other items with this id are in the array.
+        If so, this item isn't new. Only update quantity.
+        Must be passe by reference so that each item can be updated!*/
+        foreach ($_SESSION['cart'] as &$item)
+        {
+            if ($newItem['id'] == $item['id'])
+            {
+                $item['quantity'] += 1;
+                $found = true;
+            }
+        }
+        
+        // else add it to array
+        if ($found != true)
+        {
+            $newItem['quantity'] = 1;
+            array_push($_SESSION['cart'], $newItem);
+        }
     }
 
     include 'functions.php';
@@ -52,7 +68,10 @@
                     </div>
                     <ul class='nav navbar-nav'>
                         <li><a href='index.php'>Home</a></li>
-                        <li><a href='scart.php'>Cart</a></li>
+                        <li><a href='scart.php'>
+                        <span class='glyphicon glyphicon-shopping-cart' aria-hidden='true'>
+                            Cart: <?php displayCartCount(); ?> </a></li>
+                        </span>
                     </ul>
                 </div>
             </nav>

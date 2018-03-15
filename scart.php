@@ -13,6 +13,18 @@
             }
         }
     }
+    
+    // If 'itemId' quantity has been sent, search for the item with that ID and update quantity
+    if (isset($_POST['itemId']))
+    {
+        foreach($_SESSION['cart'] as &$item)
+        {
+            if($item['id'] == $_POST['itemId'])
+            {
+                $item['quantity'] = $_POST['update'];
+            }
+        }
+    }
 ?>
 <!DOCTYPE html>
 <html>
